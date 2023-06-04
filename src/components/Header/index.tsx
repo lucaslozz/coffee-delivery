@@ -29,7 +29,9 @@ export function Header() {
           <CheckoutButton>
             <ShoppingCart size={22} color="#C47F17" weight="fill" />
             {cartItens.length > 0 && (
-              <CartButtonCount>{cartItens.length}</CartButtonCount>
+              <CartButtonCount>
+                <p>{cartItens.length}</p>
+              </CartButtonCount>
             )}
           </CheckoutButton>
         </ButtonContainer>
