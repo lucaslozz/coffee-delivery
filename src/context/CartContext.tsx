@@ -8,6 +8,7 @@ interface CartContextProviderProps {
 interface CartContextType {
   cartItens: Cart[]
   addItemToCart: (cartItem: Cart) => void
+  removeItemToCart: (cartItem: Cart) => void
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -37,12 +38,22 @@ export function CartContextProvider({ children }: CartContextProviderProps) {
       },
     })
   }
+  function removeItemToCart(cartItem: Cart) {
+    dispatch({
+      type: 'REMOVE_ITEM_FROM_CART',
+      payload: {
+        cartItem,
+      },
+    })
+  }
   useEffect(() => {
     const ItensToStorage = JSON.stringify(cartItens)
     localStorage.setItem('@coffee-delivery:cart', ItensToStorage)
   }, [cartItens])
   return (
-    <CartContext.Provider value={{ cartItens, addItemToCart }}>
+    <CartContext.Provider
+      value={{ cartItens, addItemToCart, removeItemToCart }}
+    >
       {children}
     </CartContext.Provider>
   )

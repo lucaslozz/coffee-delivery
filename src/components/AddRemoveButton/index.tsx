@@ -3,12 +3,14 @@ import { QuantityContainer } from './styles'
 
 interface AddRemoveButtonProps {
   quantity: number
+  isItemInCart?: boolean
   increaseQuantity: () => void
   decreaseQuantity: () => void
 }
 
 export function AddRemoveButton({
   quantity,
+  isItemInCart,
   increaseQuantity,
   decreaseQuantity,
 }: AddRemoveButtonProps) {
@@ -33,12 +35,17 @@ export function AddRemoveButton({
     <QuantityContainer>
       <button
         type="button"
+        disabled={isItemInCart}
         onClick={() => handleUpdateCoffeeQuantity('remove')}
       >
         <Minus size={14} weight="bold" />
       </button>
       <span>{quantity}</span>
-      <button type="button" onClick={() => handleUpdateCoffeeQuantity('add')}>
+      <button
+        type="button"
+        disabled={isItemInCart}
+        onClick={() => handleUpdateCoffeeQuantity('add')}
+      >
         <Plus size={14} weight="bold" />
       </button>
     </QuantityContainer>

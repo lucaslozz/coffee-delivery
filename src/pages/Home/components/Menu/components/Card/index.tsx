@@ -1,4 +1,4 @@
-import { ShoppingCartSimple } from '@phosphor-icons/react'
+import { ShoppingCartSimple, Trash } from '@phosphor-icons/react'
 import { useContext, useState } from 'react'
 import { CartContext } from '../../../../../../context/CartContext'
 import {
@@ -23,8 +23,10 @@ interface CardProps {
 }
 
 export function Card({ name, description, price, image, type }: CardProps) {
-  const { addItemToCart } = useContext(CartContext)
+  const { cartItens, addItemToCart, removeItemToCart } = useContext(CartContext)
   const [quantity, setQuantity] = useState(1)
+
+  const isItemInCart = cartItens.some((item) => item.id === name)
 
   function increaseQuantity() {
     setQuantity(quantity + 1)
@@ -34,15 +36,25 @@ export function Card({ name, description, price, image, type }: CardProps) {
     setQuantity(quantity - 1)
   }
 
-  function addProductToCart() {
-    const cartItemAdded = {
+  function handleAddItem() {
+    const cartItemToAdd = {
       id: name,
       name,
       price,
       image,
       quantity,
     }
-    addItemToCart(cartItemAdded)
+    addItemToCart(cartItemToAdd)
+  }
+  function handleRemoveItem() {
+    const cartItemToRemove = {
+      id: name,
+      name,
+      price,
+      image,
+      quantity,
+    }
+    removeItemToCart(cartItemToRemove)
   }
 
   return (
@@ -64,12 +76,19 @@ export function Card({ name, description, price, image, type }: CardProps) {
           <ButtonContainer>
             <AddRemoveButton
               quantity={quantity}
+              isItemInCart={!!isItemInCart}
               increaseQuantity={increaseQuantity}
               decreaseQuantity={decreaseQuantity}
             />
-            <ShoppingCartButton type="button" onClick={addProductToCart}>
-              <ShoppingCartSimple size={22} color="#F3F2F2" />
-            </ShoppingCartButton>
+            {isItemInCart ? (
+              <ShoppingCartButton type="button" onClick={handleRemoveItem}>
+                <Trash size={22} color="#F3F2F2" />
+              </ShoppingCartButton>
+            ) : (
+              <ShoppingCartButton type="button" onClick={handleAddItem}>
+                <ShoppingCartSimple size={22} color="#F3F2F2" />
+              </ShoppingCartButton>
+            )}
           </ButtonContainer>
         </PriceContainer>
       </ItenContainer>

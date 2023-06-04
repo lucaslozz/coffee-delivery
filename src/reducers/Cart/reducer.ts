@@ -18,6 +18,15 @@ export function CartReduce(state: CartState, action: any) {
         draft.cartItens.push(action.payload.cartItem)
       })
     }
+    case 'REMOVE_ITEM_FROM_CART': {
+      return produce(state, (draft) => {
+        const cartItensWithOutRemoved = draft.cartItens.filter(
+          (cart) => cart.id !== action.payload.cartItem.id,
+        )
+        console.log(cartItensWithOutRemoved)
+        draft.cartItens = cartItensWithOutRemoved
+      })
+    }
     default:
       return state
   }
