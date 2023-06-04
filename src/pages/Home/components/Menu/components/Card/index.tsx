@@ -1,4 +1,4 @@
-import { Minus, Plus, ShoppingCartSimple } from '@phosphor-icons/react'
+import { ShoppingCartSimple } from '@phosphor-icons/react'
 import { useContext, useState } from 'react'
 import { CartContext } from '../../../../../../context/CartContext'
 import {
@@ -6,13 +6,13 @@ import {
   ItenContainer,
   Price,
   PriceContainer,
-  QuantityContainer,
   ShoppingCartButton,
   Subtitle,
   Title,
   Type,
   TypeContainer,
 } from './styles'
+import { AddRemoveButton } from '../../../../../../components/AddRemoveButton'
 
 interface CardProps {
   name: string
@@ -23,25 +23,15 @@ interface CardProps {
 }
 
 export function Card({ name, description, price, image, type }: CardProps) {
-  const { cartItens, addItemToCart } = useContext(CartContext)
-  const [coffeeQuantity, setCoffeeQuantity] = useState(1)
+  const { addItemToCart } = useContext(CartContext)
+  const [quantity, setQuantity] = useState(1)
 
-  function handleUpdateCoffeeQuantity(option: 'add' | 'remove') {
-    switch (option) {
-      case 'add': {
-        return setCoffeeQuantity(coffeeQuantity + 1)
-      }
+  function increaseQuantity() {
+    setQuantity(quantity + 1)
+  }
 
-      case 'remove': {
-        if (coffeeQuantity > 1) {
-          setCoffeeQuantity(coffeeQuantity - 1)
-        }
-        return coffeeQuantity
-      }
-
-      default:
-        return coffeeQuantity
-    }
+  function decreaseQuantity() {
+    setQuantity(quantity - 1)
   }
 
   function addProductToCart() {
@@ -50,10 +40,9 @@ export function Card({ name, description, price, image, type }: CardProps) {
       name,
       price,
       image,
-      quantity: coffeeQuantity,
+      quantity,
     }
     addItemToCart(cartItemAdded)
-    setCoffeeQuantity(1)
   }
 
   return (
@@ -73,22 +62,11 @@ export function Card({ name, description, price, image, type }: CardProps) {
             {price}
           </Price>
           <ButtonContainer>
-            <QuantityContainer>
-              <button
-                type="button"
-                onClick={() => handleUpdateCoffeeQuantity('remove')}
-              >
-                <Minus size={14} weight="bold" />
-              </button>
-              <span>{coffeeQuantity}</span>
-              <button
-                type="button"
-                onClick={() => handleUpdateCoffeeQuantity('add')}
-              >
-                <Plus size={14} weight="bold" />
-              </button>
-            </QuantityContainer>
-
+            <AddRemoveButton
+              quantity={quantity}
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
+            />
             <ShoppingCartButton type="button" onClick={addProductToCart}>
               <ShoppingCartSimple size={22} color="#F3F2F2" />
             </ShoppingCartButton>
